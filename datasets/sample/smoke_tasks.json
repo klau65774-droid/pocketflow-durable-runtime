@@ -1,0 +1,26 @@
+{
+  "suite": "smoke_sample",
+  "description": "Disjoint tiny synthetic smoke tasks for fast offline CI verification.",
+  "tasks": [
+    {
+      "task_id": "smoke-retail-01",
+      "domain": "retail",
+      "steps": ["lookup_order", "validate_policy", "hitl_gate", "execute_refund"],
+      "expected_side_effects": 1,
+      "crash_at_step": 2
+    },
+    {
+      "task_id": "smoke-parallel-02",
+      "domain": "parallel_batch",
+      "items": ["item_a", "item_b", "item_c"],
+      "fail_item": "item_a",
+      "max_retries": 3
+    },
+    {
+      "task_id": "smoke-cycle-03",
+      "domain": "oscillation_guard",
+      "max_steps": 12,
+      "cycle": ["plan", "tool_error"]
+    }
+  ]
+}

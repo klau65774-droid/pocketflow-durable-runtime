@@ -1,0 +1,25 @@
+{
+  "upstream_repo": "https://github.com/The-Pocket/PocketFlow",
+  "commit_sha": "f74d023f93607b8c3268133339a5e532a949898c",
+  "license": "MIT",
+  "copyright": "Copyright (c) 2024 Zachary Huang",
+  "version": "0.0.3",
+  "core_files": [
+    "pocketflow/__init__.py",
+    "pocketflow/__init__.pyi",
+    "setup.py",
+    "LICENSE"
+  ],
+  "test_files": [
+    "tests/test_async_batch_flow.py",
+    "tests/test_async_batch_node.py",
+    "tests/test_async_flow.py",
+    "tests/test_async_parallel_batch_flow.py",
+    "tests/test_async_parallel_batch_node.py",
+    "tests/test_batch_flow.py",
+    "tests/test_batch_node.py",
+    "tests/test_fall_back.py",
+    "tests/test_flow_basic.py",
+    "tests/test_flow_composition.py"
+  ]
+}

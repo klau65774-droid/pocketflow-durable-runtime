@@ -1,0 +1,52 @@
+# Private user inputs (resume, JD, local notes) - NEVER COMMIT
+.private_inputs/
+*.resume.*
+*简历*
+docs/CODEX_BACKEND_PROMPT.md
+docs/CODEX_AUDIT_PROMPT.md
+
+# Secrets & environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+
+# Local UI reference & scratch / agent artifacts
+ui_reference.png
+.superpowers/
+docs/superpowers/
+
+# Large raw datasets & model weights
+datasets/raw/
+*.parquet
+*.h5
+*.ckpt
+*.safetensors
+*.gguf
+
+# Python / Node / Test / Cache artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.benchmarks/
+.cache/
+node_modules/
+dist/
+frontend/dist/
+build/
+.DS_Store
+Thumbs.db
+*.log
+
+# Run state and SQLite WAL sidecars
+/data/*.sqlite3
+/data/*.sqlite3-*

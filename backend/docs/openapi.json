@@ -1,0 +1,3085 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PocketFlow Durable Runtime API",
+    "description": "Durable, concurrency-safe, OTel-observable runtime upgrading The-Pocket/PocketFlow",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/meta": {
+      "get": {
+        "summary": "Meta",
+        "operationId": "meta_api_v1_meta_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios": {
+      "get": {
+        "summary": "Scenarios",
+        "operationId": "scenarios_api_v1_scenarios_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenariosResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs": {
+      "post": {
+        "summary": "Create Run",
+        "operationId": "create_run_api_v1_runs_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "JSON request exceeds its byte limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON content type required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Request validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Runs",
+        "operationId": "list_runs_api_v1_runs_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid list limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}": {
+      "get": {
+        "summary": "Get Run",
+        "operationId": "get_run_api_v1_runs__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid run identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/resume": {
+      "post": {
+        "summary": "Resume Run",
+        "operationId": "resume_run_api_v1_runs__run_id__resume_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResumeRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "JSON request exceeds its byte limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON content type required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Request validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Run status prevents this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/hitl": {
+      "post": {
+        "summary": "Resolve Hitl",
+        "operationId": "resolve_hitl_api_v1_runs__run_id__hitl_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HitlDecisionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "JSON request exceeds its byte limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON content type required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Request validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Run status prevents this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/fork": {
+      "post": {
+        "summary": "Fork Run",
+        "operationId": "fork_run_api_v1_runs__run_id__fork_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForkRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForkResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "JSON request exceeds its byte limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON content type required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Request validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/trace": {
+      "get": {
+        "summary": "Get Trace",
+        "operationId": "get_trace_api_v1_runs__run_id__trace_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TraceResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid run identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/stream": {
+      "get": {
+        "summary": "Stream Run",
+        "operationId": "stream_run_api_v1_runs__run_id__stream_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid run identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/compare": {
+      "post": {
+        "summary": "Compare",
+        "operationId": "compare_api_v1_compare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompareResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "JSON request exceeds its byte limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON content type required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Request validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/eval/redaction": {
+      "post": {
+        "summary": "Eval Redaction",
+        "operationId": "eval_redaction_api_v1_eval_redaction_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedactionEvalRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedactionResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "JSON request exceeds its byte limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON content type required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Request validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/benchmarks": {
+      "get": {
+        "summary": "Get Benchmarks",
+        "operationId": "get_benchmarks_api_v1_benchmarks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BenchmarkReport"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BenchmarkPending"
+                    }
+                  ],
+                  "title": "Response Get Benchmarks Api V1 Benchmarks Get"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentDojoReport": {
+        "properties": {
+          "dataset": {
+            "type": "string",
+            "title": "Dataset"
+          },
+          "license": {
+            "type": "string",
+            "title": "License"
+          },
+          "tasks_evaluated": {
+            "type": "integer",
+            "title": "Tasks Evaluated"
+          },
+          "suites_evaluated": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Suites Evaluated"
+          },
+          "upstream_baseline": {
+            "$ref": "#/components/schemas/ChaosMetrics"
+          },
+          "durable_runtime": {
+            "$ref": "#/components/schemas/DurableChaosMetrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset",
+          "license",
+          "tasks_evaluated",
+          "suites_evaluated",
+          "upstream_baseline",
+          "durable_runtime"
+        ],
+        "title": "AgentDojoReport"
+      },
+      "BenchmarkGate": {
+        "properties": {
+          "gate_passed": {
+            "type": "boolean",
+            "title": "Gate Passed"
+          },
+          "baseline_pass_rate": {
+            "type": "number",
+            "title": "Baseline Pass Rate"
+          },
+          "candidate_pass_rate": {
+            "type": "number",
+            "title": "Candidate Pass Rate"
+          },
+          "delta": {
+            "type": "number",
+            "title": "Delta"
+          },
+          "duplicate_side_effect_rate": {
+            "type": "number",
+            "title": "Duplicate Side Effect Rate"
+          },
+          "leaked_secrets": {
+            "type": "integer",
+            "title": "Leaked Secrets"
+          },
+          "checks": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "title": "Checks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "gate_passed",
+          "baseline_pass_rate",
+          "candidate_pass_rate",
+          "delta",
+          "duplicate_side_effect_rate",
+          "leaked_secrets",
+          "checks"
+        ],
+        "title": "BenchmarkGate"
+      },
+      "BenchmarkPending": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "pending",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message"
+        ],
+        "title": "BenchmarkPending"
+      },
+      "BenchmarkReport": {
+        "properties": {
+          "project": {
+            "type": "string",
+            "title": "Project"
+          },
+          "upstream_repo": {
+            "type": "string",
+            "title": "Upstream Repo"
+          },
+          "upstream_commit": {
+            "type": "string",
+            "title": "Upstream Commit"
+          },
+          "hardware": {
+            "type": "string",
+            "title": "Hardware"
+          },
+          "total_eval_sec": {
+            "type": "number",
+            "title": "Total Eval Sec"
+          },
+          "tier1_tau_bench": {
+            "$ref": "#/components/schemas/TauBenchReport"
+          },
+          "tier1_bfcl_v4": {
+            "$ref": "#/components/schemas/BfclReport"
+          },
+          "tier2_agentdojo_chaos": {
+            "$ref": "#/components/schemas/AgentDojoReport"
+          },
+          "tier3_redaction_and_dos": {
+            "$ref": "#/components/schemas/RedactionAndDosReport"
+          },
+          "ci_regression_gate": {
+            "$ref": "#/components/schemas/BenchmarkGate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "project",
+          "upstream_repo",
+          "upstream_commit",
+          "hardware",
+          "total_eval_sec",
+          "tier1_tau_bench",
+          "tier1_bfcl_v4",
+          "tier2_agentdojo_chaos",
+          "tier3_redaction_and_dos",
+          "ci_regression_gate"
+        ],
+        "title": "BenchmarkReport"
+      },
+      "BfclReport": {
+        "properties": {
+          "dataset": {
+            "type": "string",
+            "title": "Dataset"
+          },
+          "license": {
+            "type": "string",
+            "title": "License"
+          },
+          "tasks_evaluated": {
+            "type": "integer",
+            "title": "Tasks Evaluated"
+          },
+          "files_evaluated": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Files Evaluated"
+          },
+          "skipped_tasks": {
+            "type": "integer",
+            "title": "Skipped Tasks"
+          },
+          "upstream_baseline": {
+            "$ref": "#/components/schemas/ReplayMetrics"
+          },
+          "durable_runtime": {
+            "$ref": "#/components/schemas/ReplayMetrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset",
+          "license",
+          "tasks_evaluated",
+          "files_evaluated",
+          "skipped_tasks",
+          "upstream_baseline",
+          "durable_runtime"
+        ],
+        "title": "BfclReport"
+      },
+      "ChaosMetrics": {
+        "properties": {
+          "fault_resilience_rate": {
+            "type": "number",
+            "title": "Fault Resilience Rate"
+          },
+          "wilson_95ci": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Wilson 95Ci"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fault_resilience_rate",
+          "wilson_95ci"
+        ],
+        "title": "ChaosMetrics"
+      },
+      "CheckpointRecord": {
+        "properties": {
+          "step_seq": {
+            "type": "integer",
+            "title": "Step Seq"
+          },
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "action": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "state": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "State"
+          },
+          "state_diff": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "State Diff"
+          },
+          "checksum": {
+            "type": "string",
+            "title": "Checksum"
+          },
+          "created_at": {
+            "type": "number",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "step_seq",
+          "node_id",
+          "action",
+          "status",
+          "state",
+          "state_diff",
+          "checksum",
+          "created_at"
+        ],
+        "title": "CheckpointRecord"
+      },
+      "CompareDelta": {
+        "properties": {
+          "baseline_failed_or_vulnerable": {
+            "type": "boolean",
+            "title": "Baseline Failed Or Vulnerable"
+          },
+          "durable_passed": {
+            "type": "boolean",
+            "title": "Durable Passed"
+          },
+          "duplicate_side_effects_prevented": {
+            "type": "integer",
+            "title": "Duplicate Side Effects Prevented"
+          },
+          "silent_failures_prevented": {
+            "type": "integer",
+            "title": "Silent Failures Prevented"
+          }
+        },
+        "type": "object",
+        "required": [
+          "baseline_failed_or_vulnerable",
+          "durable_passed",
+          "duplicate_side_effects_prevented",
+          "silent_failures_prevented"
+        ],
+        "title": "CompareDelta"
+      },
+      "CompareRequest": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Scenario Id"
+          },
+          "fault_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fault Mode"
+          },
+          "crash_step": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 4.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crash Step"
+          },
+          "seed": {
+            "type": "integer",
+            "maximum": 100000.0,
+            "minimum": 0.0,
+            "title": "Seed",
+            "default": 42
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "scenario_id"
+        ],
+        "title": "CompareRequest"
+      },
+      "CompareResponse": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "fault_mode": {
+            "type": "string",
+            "title": "Fault Mode"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "baseline": {
+            "$ref": "#/components/schemas/CompareSide"
+          },
+          "durable": {
+            "$ref": "#/components/schemas/DurableCompareSide"
+          },
+          "delta_summary": {
+            "$ref": "#/components/schemas/CompareDelta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "fault_mode",
+          "seed",
+          "baseline",
+          "durable",
+          "delta_summary"
+        ],
+        "title": "CompareResponse"
+      },
+      "CompareSide": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "PAUSED_HITL",
+              "CRASHED",
+              "FAILED",
+              "TRIPPED_OSCILLATION",
+              "DEAD_LETTERED"
+            ],
+            "title": "Status"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "PASSED",
+              "PROTECTED",
+              "FAILED",
+              "VULNERABLE",
+              "INTERRUPTED"
+            ],
+            "title": "Verdict"
+          },
+          "failure_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Reason"
+          },
+          "output": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Output"
+          },
+          "duplicate_side_effects": {
+            "type": "integer",
+            "title": "Duplicate Side Effects"
+          },
+          "elapsed_ms": {
+            "type": "number",
+            "title": "Elapsed Ms"
+          },
+          "steps_executed": {
+            "type": "integer",
+            "title": "Steps Executed"
+          },
+          "leaked_secrets": {
+            "type": "integer",
+            "title": "Leaked Secrets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "status",
+          "verdict",
+          "failure_reason",
+          "output",
+          "duplicate_side_effects",
+          "elapsed_ms",
+          "steps_executed",
+          "leaked_secrets"
+        ],
+        "title": "CompareSide"
+      },
+      "CreateRunRequest": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Scenario Id"
+          },
+          "mode": {
+            "type": "string",
+            "const": "durable_runtime",
+            "title": "Mode",
+            "default": "durable_runtime"
+          },
+          "fault_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fault Mode"
+          },
+          "crash_step": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 4.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crash Step"
+          },
+          "require_hitl": {
+            "type": "boolean",
+            "title": "Require Hitl",
+            "default": false
+          },
+          "max_steps": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 256.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Steps"
+          },
+          "max_concurrency": {
+            "type": "integer",
+            "maximum": 64.0,
+            "minimum": 1.0,
+            "title": "Max Concurrency",
+            "default": 4
+          },
+          "timeout_sec": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 60.0,
+                "minimum": 0.05
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timeout Sec"
+          },
+          "transition_policy": {
+            "type": "string",
+            "enum": [
+              "strict",
+              "fallback",
+              "dead_letter"
+            ],
+            "title": "Transition Policy",
+            "default": "strict"
+          },
+          "input_overrides": {
+            "additionalProperties": true,
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Input Overrides"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "scenario_id"
+        ],
+        "title": "CreateRunRequest"
+      },
+      "DecoyResult": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "flagged": {
+            "type": "boolean",
+            "title": "Flagged"
+          },
+          "rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rules"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "flagged",
+          "rules"
+        ],
+        "title": "DecoyResult"
+      },
+      "DosGuardsReport": {
+        "properties": {
+          "fanout_1000_bulkhead_cap_16_passed": {
+            "type": "boolean",
+            "title": "Fanout 1000 Bulkhead Cap 16 Passed"
+          },
+          "peak_concurrency": {
+            "type": "integer",
+            "title": "Peak Concurrency"
+          },
+          "circular_ref_blocked": {
+            "type": "boolean",
+            "title": "Circular Ref Blocked"
+          },
+          "snapshot_byte_cap_blocked": {
+            "type": "boolean",
+            "title": "Snapshot Byte Cap Blocked"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fanout_1000_bulkhead_cap_16_passed",
+          "peak_concurrency",
+          "circular_ref_blocked",
+          "snapshot_byte_cap_blocked"
+        ],
+        "title": "DosGuardsReport"
+      },
+      "DurableChaosMetrics": {
+        "properties": {
+          "fault_resilience_rate": {
+            "type": "number",
+            "title": "Fault Resilience Rate"
+          },
+          "wilson_95ci": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Wilson 95Ci"
+          },
+          "oscillation_median_trip_ms": {
+            "type": "number",
+            "title": "Oscillation Median Trip Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fault_resilience_rate",
+          "wilson_95ci",
+          "oscillation_median_trip_ms"
+        ],
+        "title": "DurableChaosMetrics"
+      },
+      "DurableCompareSide": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "PAUSED_HITL",
+              "CRASHED",
+              "FAILED",
+              "TRIPPED_OSCILLATION",
+              "DEAD_LETTERED"
+            ],
+            "title": "Status"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "PASSED",
+              "PROTECTED",
+              "FAILED",
+              "VULNERABLE",
+              "INTERRUPTED"
+            ],
+            "title": "Verdict"
+          },
+          "failure_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Reason"
+          },
+          "output": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Output"
+          },
+          "duplicate_side_effects": {
+            "type": "integer",
+            "title": "Duplicate Side Effects"
+          },
+          "elapsed_ms": {
+            "type": "number",
+            "title": "Elapsed Ms"
+          },
+          "steps_executed": {
+            "type": "integer",
+            "title": "Steps Executed"
+          },
+          "leaked_secrets": {
+            "type": "integer",
+            "title": "Leaked Secrets"
+          },
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "status",
+          "verdict",
+          "failure_reason",
+          "output",
+          "duplicate_side_effects",
+          "elapsed_ms",
+          "steps_executed",
+          "leaked_secrets",
+          "run_id"
+        ],
+        "title": "DurableCompareSide"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "details"
+        ],
+        "title": "ErrorDetail"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "ErrorResponse"
+      },
+      "ForkResponse": {
+        "properties": {
+          "parent_run_id": {
+            "type": "string",
+            "title": "Parent Run Id"
+          },
+          "forked_run": {
+            "$ref": "#/components/schemas/RunDetail"
+          },
+          "state_diff": {
+            "$ref": "#/components/schemas/StateDiff"
+          }
+        },
+        "type": "object",
+        "required": [
+          "parent_run_id",
+          "forked_run",
+          "state_diff"
+        ],
+        "title": "ForkResponse"
+      },
+      "ForkRunRequest": {
+        "properties": {
+          "from_step_seq": {
+            "type": "integer",
+            "maximum": 256.0,
+            "minimum": 1.0,
+            "title": "From Step Seq"
+          },
+          "state_patch": {
+            "additionalProperties": true,
+            "type": "object",
+            "maxProperties": 256,
+            "title": "State Patch"
+          },
+          "clear_fault": {
+            "type": "boolean",
+            "title": "Clear Fault",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "from_step_seq"
+        ],
+        "title": "ForkRunRequest"
+      },
+      "GraphEdge": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "target",
+          "action"
+        ],
+        "title": "GraphEdge"
+      },
+      "GraphNode": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "kind"
+        ],
+        "title": "GraphNode"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "HealthResponse"
+      },
+      "HitlDecisionRequest": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "reject"
+            ],
+            "title": "Decision"
+          },
+          "reviewer_note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewer Note"
+          },
+          "state_patch": {
+            "additionalProperties": true,
+            "type": "object",
+            "maxProperties": 256,
+            "title": "State Patch"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "title": "HitlDecisionRequest"
+      },
+      "HitlInterrupt": {
+        "properties": {
+          "interrupt_id": {
+            "type": "string",
+            "title": "Interrupt Id"
+          },
+          "step_seq": {
+            "type": "integer",
+            "title": "Step Seq"
+          },
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ],
+            "title": "Status"
+          },
+          "reviewer_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewer Note"
+          },
+          "created_at": {
+            "type": "number",
+            "title": "Created At"
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "interrupt_id",
+          "step_seq",
+          "node_id",
+          "reason",
+          "status",
+          "reviewer_note",
+          "created_at",
+          "resolved_at"
+        ],
+        "title": "HitlInterrupt"
+      },
+      "LedgerEntry": {
+        "properties": {
+          "idempotency_key": {
+            "type": "string",
+            "title": "Idempotency Key"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "result": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Result"
+          },
+          "execution_count": {
+            "type": "integer",
+            "title": "Execution Count"
+          },
+          "created_at": {
+            "type": "number",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "idempotency_key",
+          "tool_name",
+          "result",
+          "execution_count",
+          "created_at"
+        ],
+        "title": "LedgerEntry"
+      },
+      "MetaResponse": {
+        "properties": {
+          "service": {
+            "type": "string",
+            "title": "Service"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "upstream_repo": {
+            "type": "string",
+            "title": "Upstream Repo"
+          },
+          "upstream_commit": {
+            "type": "string",
+            "title": "Upstream Commit"
+          },
+          "upstream_license": {
+            "type": "string",
+            "title": "Upstream License"
+          },
+          "storage_mode": {
+            "type": "string",
+            "enum": [
+              "sqlite-wal",
+              "sqlite-memory"
+            ],
+            "title": "Storage Mode"
+          },
+          "cpu_only": {
+            "type": "boolean",
+            "title": "Cpu Only"
+          }
+        },
+        "type": "object",
+        "required": [
+          "service",
+          "version",
+          "upstream_repo",
+          "upstream_commit",
+          "upstream_license",
+          "storage_mode",
+          "cpu_only"
+        ],
+        "title": "MetaResponse"
+      },
+      "OtlpAttribute": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "value": {
+            "$ref": "#/components/schemas/OtlpValue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "OtlpAttribute"
+      },
+      "OtlpExport": {
+        "properties": {
+          "resourceSpans": {
+            "items": {
+              "$ref": "#/components/schemas/OtlpResourceSpans"
+            },
+            "type": "array",
+            "title": "Resourcespans"
+          }
+        },
+        "type": "object",
+        "required": [
+          "resourceSpans"
+        ],
+        "title": "OtlpExport"
+      },
+      "OtlpResource": {
+        "properties": {
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/OtlpAttribute"
+            },
+            "type": "array",
+            "title": "Attributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attributes"
+        ],
+        "title": "OtlpResource"
+      },
+      "OtlpResourceSpans": {
+        "properties": {
+          "resource": {
+            "$ref": "#/components/schemas/OtlpResource"
+          },
+          "scopeSpans": {
+            "items": {
+              "$ref": "#/components/schemas/OtlpScopeSpans"
+            },
+            "type": "array",
+            "title": "Scopespans"
+          }
+        },
+        "type": "object",
+        "required": [
+          "resource",
+          "scopeSpans"
+        ],
+        "title": "OtlpResourceSpans"
+      },
+      "OtlpScope": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "version"
+        ],
+        "title": "OtlpScope"
+      },
+      "OtlpScopeSpans": {
+        "properties": {
+          "scope": {
+            "$ref": "#/components/schemas/OtlpScope"
+          },
+          "spans": {
+            "items": {
+              "$ref": "#/components/schemas/OtlpSpan"
+            },
+            "type": "array",
+            "title": "Spans"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scope",
+          "spans"
+        ],
+        "title": "OtlpScopeSpans"
+      },
+      "OtlpSpan": {
+        "properties": {
+          "traceId": {
+            "type": "string",
+            "title": "Traceid"
+          },
+          "spanId": {
+            "type": "string",
+            "title": "Spanid"
+          },
+          "parentSpanId": {
+            "type": "string",
+            "title": "Parentspanid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "title": "Kind"
+          },
+          "startTimeUnixNano": {
+            "type": "string",
+            "title": "Starttimeunixnano"
+          },
+          "endTimeUnixNano": {
+            "type": "string",
+            "title": "Endtimeunixnano"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OtlpSpanStatus"
+          },
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/OtlpAttribute"
+            },
+            "type": "array",
+            "title": "Attributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "traceId",
+          "spanId",
+          "parentSpanId",
+          "name",
+          "kind",
+          "startTimeUnixNano",
+          "endTimeUnixNano",
+          "status",
+          "attributes"
+        ],
+        "title": "OtlpSpan"
+      },
+      "OtlpSpanStatus": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ],
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "OtlpSpanStatus"
+      },
+      "OtlpValue": {
+        "properties": {
+          "stringValue": {
+            "type": "string",
+            "title": "Stringvalue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stringValue"
+        ],
+        "title": "OtlpValue"
+      },
+      "RedactionAndDosReport": {
+        "properties": {
+          "redaction": {
+            "$ref": "#/components/schemas/RedactionSummary"
+          },
+          "dos_guards": {
+            "$ref": "#/components/schemas/DosGuardsReport"
+          }
+        },
+        "type": "object",
+        "required": [
+          "redaction",
+          "dos_guards"
+        ],
+        "title": "RedactionAndDosReport"
+      },
+      "RedactionEvalRequest": {
+        "properties": {
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Payload"
+          },
+          "include_builtin_suite": {
+            "type": "boolean",
+            "title": "Include Builtin Suite",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "RedactionEvalRequest"
+      },
+      "RedactionResponse": {
+        "properties": {
+          "redacted_payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Redacted Payload"
+          },
+          "findings_count": {
+            "type": "integer",
+            "title": "Findings Count"
+          },
+          "matched_rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Matched Rules"
+          },
+          "suite_summary": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RedactionSuite"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "redacted_payload",
+          "findings_count",
+          "matched_rules",
+          "suite_summary"
+        ],
+        "title": "RedactionResponse"
+      },
+      "RedactionSuite": {
+        "properties": {
+          "secrets_tested": {
+            "type": "integer",
+            "title": "Secrets Tested"
+          },
+          "secrets_redacted": {
+            "type": "integer",
+            "title": "Secrets Redacted"
+          },
+          "recall": {
+            "type": "number",
+            "title": "Recall"
+          },
+          "decoys_tested": {
+            "type": "integer",
+            "title": "Decoys Tested"
+          },
+          "decoys_flagged": {
+            "type": "integer",
+            "title": "Decoys Flagged"
+          },
+          "benign_fpr": {
+            "type": "number",
+            "title": "Benign Fpr"
+          },
+          "secret_details": {
+            "items": {
+              "$ref": "#/components/schemas/SecretResult"
+            },
+            "type": "array",
+            "title": "Secret Details"
+          },
+          "decoy_details": {
+            "items": {
+              "$ref": "#/components/schemas/DecoyResult"
+            },
+            "type": "array",
+            "title": "Decoy Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "secrets_tested",
+          "secrets_redacted",
+          "recall",
+          "decoys_tested",
+          "decoys_flagged",
+          "benign_fpr",
+          "secret_details",
+          "decoy_details"
+        ],
+        "title": "RedactionSuite"
+      },
+      "RedactionSummary": {
+        "properties": {
+          "secrets_tested": {
+            "type": "integer",
+            "title": "Secrets Tested"
+          },
+          "secrets_redacted": {
+            "type": "integer",
+            "title": "Secrets Redacted"
+          },
+          "recall": {
+            "type": "number",
+            "title": "Recall"
+          },
+          "decoys_tested": {
+            "type": "integer",
+            "title": "Decoys Tested"
+          },
+          "decoys_flagged": {
+            "type": "integer",
+            "title": "Decoys Flagged"
+          },
+          "benign_fpr": {
+            "type": "number",
+            "title": "Benign Fpr"
+          }
+        },
+        "type": "object",
+        "required": [
+          "secrets_tested",
+          "secrets_redacted",
+          "recall",
+          "decoys_tested",
+          "decoys_flagged",
+          "benign_fpr"
+        ],
+        "title": "RedactionSummary"
+      },
+      "ReplayMetrics": {
+        "properties": {
+          "pass_rate": {
+            "type": "number",
+            "title": "Pass Rate"
+          },
+          "wilson_95ci": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Wilson 95Ci"
+          },
+          "p95_ms": {
+            "type": "number",
+            "title": "P95 Ms"
+          },
+          "p99_ms": {
+            "type": "number",
+            "title": "P99 Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pass_rate",
+          "wilson_95ci",
+          "p95_ms",
+          "p99_ms"
+        ],
+        "title": "ReplayMetrics"
+      },
+      "ResumeRunRequest": {
+        "properties": {
+          "clear_fault": {
+            "type": "boolean",
+            "title": "Clear Fault",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ResumeRunRequest"
+      },
+      "RunDetail": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "PAUSED_HITL",
+              "CRASHED",
+              "FAILED",
+              "TRIPPED_OSCILLATION",
+              "DEAD_LETTERED"
+            ],
+            "title": "Status"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "PASSED",
+              "PROTECTED",
+              "FAILED",
+              "VULNERABLE",
+              "INTERRUPTED"
+            ],
+            "title": "Verdict"
+          },
+          "parent_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Run Id"
+          },
+          "forked_from_step": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forked From Step"
+          },
+          "fault_mode": {
+            "type": "string",
+            "title": "Fault Mode"
+          },
+          "steps_executed": {
+            "type": "integer",
+            "title": "Steps Executed"
+          },
+          "duplicate_side_effects": {
+            "type": "integer",
+            "title": "Duplicate Side Effects"
+          },
+          "leaked_secrets": {
+            "type": "integer",
+            "title": "Leaked Secrets"
+          },
+          "redacted_secrets_count": {
+            "type": "integer",
+            "title": "Redacted Secrets Count"
+          },
+          "created_at": {
+            "type": "number",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "number",
+            "title": "Updated At"
+          },
+          "crash_step": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crash Step"
+          },
+          "require_hitl": {
+            "type": "boolean",
+            "title": "Require Hitl"
+          },
+          "max_steps": {
+            "type": "integer",
+            "title": "Max Steps"
+          },
+          "failure_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Reason"
+          },
+          "state": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "State"
+          },
+          "metrics": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metrics"
+          },
+          "checkpoints": {
+            "items": {
+              "$ref": "#/components/schemas/CheckpointRecord"
+            },
+            "type": "array",
+            "title": "Checkpoints"
+          },
+          "ledger_entries": {
+            "items": {
+              "$ref": "#/components/schemas/LedgerEntry"
+            },
+            "type": "array",
+            "title": "Ledger Entries"
+          },
+          "hitl_interrupt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HitlInterrupt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id",
+          "scenario_id",
+          "mode",
+          "status",
+          "verdict",
+          "parent_run_id",
+          "forked_from_step",
+          "fault_mode",
+          "steps_executed",
+          "duplicate_side_effects",
+          "leaked_secrets",
+          "redacted_secrets_count",
+          "created_at",
+          "updated_at",
+          "crash_step",
+          "require_hitl",
+          "max_steps",
+          "failure_reason",
+          "state",
+          "metrics",
+          "checkpoints",
+          "ledger_entries",
+          "hitl_interrupt"
+        ],
+        "title": "RunDetail"
+      },
+      "RunSummary": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "PAUSED_HITL",
+              "CRASHED",
+              "FAILED",
+              "TRIPPED_OSCILLATION",
+              "DEAD_LETTERED"
+            ],
+            "title": "Status"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "PASSED",
+              "PROTECTED",
+              "FAILED",
+              "VULNERABLE",
+              "INTERRUPTED"
+            ],
+            "title": "Verdict"
+          },
+          "parent_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Run Id"
+          },
+          "forked_from_step": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forked From Step"
+          },
+          "fault_mode": {
+            "type": "string",
+            "title": "Fault Mode"
+          },
+          "steps_executed": {
+            "type": "integer",
+            "title": "Steps Executed"
+          },
+          "duplicate_side_effects": {
+            "type": "integer",
+            "title": "Duplicate Side Effects"
+          },
+          "leaked_secrets": {
+            "type": "integer",
+            "title": "Leaked Secrets"
+          },
+          "redacted_secrets_count": {
+            "type": "integer",
+            "title": "Redacted Secrets Count"
+          },
+          "created_at": {
+            "type": "number",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "number",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id",
+          "scenario_id",
+          "mode",
+          "status",
+          "verdict",
+          "parent_run_id",
+          "forked_from_step",
+          "fault_mode",
+          "steps_executed",
+          "duplicate_side_effects",
+          "leaked_secrets",
+          "redacted_secrets_count",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "RunSummary"
+      },
+      "RunsResponse": {
+        "properties": {
+          "runs": {
+            "items": {
+              "$ref": "#/components/schemas/RunSummary"
+            },
+            "type": "array",
+            "title": "Runs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "runs"
+        ],
+        "title": "RunsResponse"
+      },
+      "ScenarioGraph": {
+        "properties": {
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/GraphNode"
+            },
+            "type": "array",
+            "title": "Nodes"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/GraphEdge"
+            },
+            "type": "array",
+            "title": "Edges"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nodes",
+          "edges"
+        ],
+        "title": "ScenarioGraph"
+      },
+      "ScenarioSpec": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "fault_modes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Fault Modes"
+          },
+          "default_fault": {
+            "type": "string",
+            "title": "Default Fault"
+          },
+          "graph": {
+            "$ref": "#/components/schemas/ScenarioGraph"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "description",
+          "fault_modes",
+          "default_fault",
+          "graph"
+        ],
+        "title": "ScenarioSpec"
+      },
+      "ScenariosResponse": {
+        "properties": {
+          "scenarios": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioSpec"
+            },
+            "type": "array",
+            "title": "Scenarios"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scenarios"
+        ],
+        "title": "ScenariosResponse"
+      },
+      "SecretResult": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "redacted": {
+            "type": "boolean",
+            "title": "Redacted"
+          },
+          "rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rules"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "redacted",
+          "rules"
+        ],
+        "title": "SecretResult"
+      },
+      "SpanRecord": {
+        "properties": {
+          "span_id": {
+            "type": "string",
+            "title": "Span Id"
+          },
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "parent_span_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Span Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "status_code": {
+            "type": "string",
+            "title": "Status Code"
+          },
+          "start_time_ns": {
+            "type": "integer",
+            "title": "Start Time Ns"
+          },
+          "end_time_ns": {
+            "type": "integer",
+            "title": "End Time Ns"
+          },
+          "duration_ms": {
+            "type": "number",
+            "title": "Duration Ms"
+          },
+          "attributes": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Attributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "span_id",
+          "trace_id",
+          "run_id",
+          "parent_span_id",
+          "name",
+          "kind",
+          "status_code",
+          "start_time_ns",
+          "end_time_ns",
+          "duration_ms",
+          "attributes"
+        ],
+        "title": "SpanRecord"
+      },
+      "StateDiff": {
+        "properties": {
+          "added": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Added"
+          },
+          "removed": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Removed"
+          },
+          "changed": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Changed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "added",
+          "removed",
+          "changed"
+        ],
+        "title": "StateDiff"
+      },
+      "TauBenchReport": {
+        "properties": {
+          "dataset": {
+            "type": "string",
+            "title": "Dataset"
+          },
+          "license": {
+            "type": "string",
+            "title": "License"
+          },
+          "tasks_evaluated": {
+            "type": "integer",
+            "title": "Tasks Evaluated"
+          },
+          "retail_tasks": {
+            "type": "integer",
+            "title": "Retail Tasks"
+          },
+          "airline_tasks": {
+            "type": "integer",
+            "title": "Airline Tasks"
+          },
+          "tasks_available": {
+            "type": "integer",
+            "title": "Tasks Available"
+          },
+          "db_records_counted": {
+            "type": "integer",
+            "title": "Db Records Counted"
+          },
+          "trials_per_task": {
+            "type": "integer",
+            "title": "Trials Per Task"
+          },
+          "upstream_baseline": {
+            "$ref": "#/components/schemas/TauReplayMetrics"
+          },
+          "durable_runtime": {
+            "$ref": "#/components/schemas/TauReplayMetrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset",
+          "license",
+          "tasks_evaluated",
+          "retail_tasks",
+          "airline_tasks",
+          "tasks_available",
+          "db_records_counted",
+          "trials_per_task",
+          "upstream_baseline",
+          "durable_runtime"
+        ],
+        "title": "TauBenchReport"
+      },
+      "TauReplayMetrics": {
+        "properties": {
+          "pass_rate": {
+            "type": "number",
+            "title": "Pass Rate"
+          },
+          "wilson_95ci": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Wilson 95Ci"
+          },
+          "p95_ms": {
+            "type": "number",
+            "title": "P95 Ms"
+          },
+          "p99_ms": {
+            "type": "number",
+            "title": "P99 Ms"
+          },
+          "pass_power_3": {
+            "type": "number",
+            "title": "Pass Power 3"
+          },
+          "duplicate_side_effects": {
+            "type": "integer",
+            "title": "Duplicate Side Effects"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pass_rate",
+          "wilson_95ci",
+          "p95_ms",
+          "p99_ms",
+          "pass_power_3",
+          "duplicate_side_effects"
+        ],
+        "title": "TauReplayMetrics"
+      },
+      "TraceResponse": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "spans": {
+            "items": {
+              "$ref": "#/components/schemas/SpanRecord"
+            },
+            "type": "array",
+            "title": "Spans"
+          },
+          "otel_export": {
+            "$ref": "#/components/schemas/OtlpExport"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id",
+          "trace_id",
+          "spans",
+          "otel_export"
+        ],
+        "title": "TraceResponse"
+      }
+    }
+  }
+}

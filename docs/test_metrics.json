@@ -1,0 +1,127 @@
+{
+  "project": "pocketflow-durable-runtime",
+  "upstream_repo": "https://github.com/The-Pocket/PocketFlow",
+  "upstream_commit": "f74d023f93607b8c3268133339a5e532a949898c",
+  "hardware": "Local CPU (zero paid LLM APIs)",
+  "total_eval_sec": 12.23,
+  "tier1_tau_bench": {
+    "dataset": "sierra-research/tau-bench",
+    "license": "MIT",
+    "tasks_evaluated": 156,
+    "retail_tasks": 113,
+    "airline_tasks": 43,
+    "tasks_available": 165,
+    "db_records_counted": 3000,
+    "trials_per_task": 3,
+    "upstream_baseline": {
+      "pass_rate": 0.1282,
+      "wilson_95ci": [
+        0.0845,
+        0.1897
+      ],
+      "pass_power_3": 0.1282,
+      "duplicate_side_effects": 408,
+      "p95_ms": 0.272,
+      "p99_ms": 0.388
+    },
+    "durable_runtime": {
+      "pass_rate": 1.0,
+      "wilson_95ci": [
+        0.976,
+        1.0
+      ],
+      "pass_power_3": 1.0,
+      "duplicate_side_effects": 0,
+      "p95_ms": 40.306,
+      "p99_ms": 44.472
+    }
+  },
+  "tier1_bfcl_v4": {
+    "dataset": "ShishirPatil/gorilla BFCL v4",
+    "license": "Apache-2.0",
+    "files_evaluated": [
+      "BFCL_v4_multi_turn_base.json",
+      "BFCL_v4_multi_turn_miss_func.json",
+      "BFCL_v4_multi_turn_miss_param.json",
+      "BFCL_v4_parallel.json",
+      "BFCL_v4_live_parallel_multiple.json"
+    ],
+    "tasks_evaluated": 824,
+    "skipped_tasks": 0,
+    "upstream_baseline": {
+      "pass_rate": 0.4466,
+      "wilson_95ci": [
+        0.413,
+        0.4807
+      ],
+      "p95_ms": 0.045,
+      "p99_ms": 0.105
+    },
+    "durable_runtime": {
+      "pass_rate": 1.0,
+      "wilson_95ci": [
+        0.9954,
+        1.0
+      ],
+      "p95_ms": 0.087,
+      "p99_ms": 0.169
+    }
+  },
+  "tier2_agentdojo_chaos": {
+    "dataset": "ethz-spylab/agentdojo v1 + Chaos Suite",
+    "license": "MIT",
+    "suites_evaluated": [
+      "banking",
+      "slack",
+      "travel",
+      "workspace"
+    ],
+    "tasks_evaluated": 86,
+    "upstream_baseline": {
+      "fault_resilience_rate": 0.0,
+      "wilson_95ci": [
+        0.0,
+        0.0428
+      ]
+    },
+    "durable_runtime": {
+      "fault_resilience_rate": 1.0,
+      "wilson_95ci": [
+        0.9572,
+        1.0
+      ],
+      "oscillation_median_trip_ms": 0.05
+    }
+  },
+  "tier3_redaction_and_dos": {
+    "redaction": {
+      "secrets_tested": 15,
+      "secrets_redacted": 15,
+      "recall": 1.0,
+      "decoys_tested": 18,
+      "decoys_flagged": 0,
+      "benign_fpr": 0.0
+    },
+    "dos_guards": {
+      "fanout_1000_bulkhead_cap_16_passed": true,
+      "peak_concurrency": 16,
+      "circular_ref_blocked": true,
+      "snapshot_byte_cap_blocked": true
+    }
+  },
+  "ci_regression_gate": {
+    "gate_passed": true,
+    "baseline_pass_rate": 0.1282,
+    "candidate_pass_rate": 1.0,
+    "delta": 0.8718,
+    "duplicate_side_effect_rate": 0.0,
+    "leaked_secrets": 0,
+    "checks": {
+      "tau_replay": true,
+      "bfcl_replay": true,
+      "agentdojo_chaos": true,
+      "redaction": true,
+      "resource_guards": true
+    }
+  }
+}
